@@ -1,0 +1,630 @@
+{
+ "version": 1,
+ "title": "Roped Together: Braque, Picasso & the Invention of Cubism",
+ "mode": "teacher",
+ "jstor": {
+  "folder": "ARH1000 Braque & Picasso: Cubism (Prof. Blanco)"
+ },
+ "notes_suffix": "SOURCES: JSTOR/Artstor record below; museum collection pages; Smarthistory (smarthistory.org); Tate and MoMA online collection essays.",
+ "slides": [
+  {
+   "type": "title",
+   "title": "Roped Together: Braque, Picasso & the Invention of Cubism",
+   "subtitle": "ARH1000 · Theme 5: Understanding Meaning and Context in Art (pg 129–157)\nProf. Lucas Blanco · November 3, 2026",
+   "notes": "Today's two open presentation slots (Picasso and Braque) as one story. Images come from JSTOR/Artstor (licensed to MDC for teaching). Picasso's paintings are not in JSTOR because his estate does not license them; his works are on 'View it here' slides that open the museum's own page."
+  },
+  {
+   "type": "text",
+   "title": "Why 1905–1914 matters",
+   "bullets": [
+    {
+     "text": "In under ten years, Western painting stops copying what the eye sees."
+    },
+    {
+     "text": "Color is set free (Fauvism: Matisse, Derain, the young Braque)."
+    },
+    {
+     "text": "Space and form are taken apart, then rebuilt from real scraps (Cubism: Braque and Picasso)."
+    },
+    {
+     "text": "This clears the way for full abstraction: Mondrian, Malevich, and later Abstract Expressionism."
+    },
+    {
+     "text": "Theme 5 question: how does CONTEXT (who, where, when, with whom) give these images their meaning?"
+    }
+   ],
+   "notes": "Professor's framing: this is the most important decade of Western image-making; it clears the way for abstraction and Abstract Expressionism."
+  },
+  {
+   "type": "timeline",
+   "title": "Two lanes, one road: 1905–1914",
+   "start": 1905,
+   "end": 1914,
+   "lanes": [
+    {
+     "id": "B",
+     "label": "BRAQUE",
+     "color": "A31F1F"
+    },
+    {
+     "id": "P",
+     "label": "PICASSO",
+     "color": "1F4E9A"
+    }
+   ],
+   "events": [
+    {
+     "year": 1905.6,
+     "lane": "B",
+     "text": "Sees the Fauves at the Salon d'Automne",
+     "above": true
+    },
+    {
+     "year": 1906.5,
+     "lane": "B",
+     "text": "Fauve summer at L'Estaque",
+     "above": false
+    },
+    {
+     "year": 1907.25,
+     "lane": "B",
+     "text": "Sells all 6 Fauve works",
+     "above": true
+    },
+    {
+     "year": 1907.85,
+     "lane": "B",
+     "text": "Meets Picasso; sees Demoiselles",
+     "above": false
+    },
+    {
+     "year": 1908.75,
+     "lane": "B",
+     "text": "Houses at L'Estaque → 'cubes'",
+     "above": true
+    },
+    {
+     "year": 1911.0,
+     "lane": "B",
+     "text": "Stenciled letters (The Portuguese)",
+     "above": false
+    },
+    {
+     "year": 1912.7,
+     "lane": "B",
+     "text": "First papier collé",
+     "above": true
+    },
+    {
+     "year": 1914.6,
+     "lane": "B",
+     "text": "Mobilized for WWI",
+     "above": false
+    },
+    {
+     "year": 1905.0,
+     "lane": "P",
+     "text": "Rose Period circus families",
+     "above": true
+    },
+    {
+     "year": 1906.3,
+     "lane": "P",
+     "text": "Sees Matisse's Joy of Life; Stein portrait",
+     "above": false
+    },
+    {
+     "year": 1907.5,
+     "lane": "P",
+     "text": "Les Demoiselles d'Avignon",
+     "above": true
+    },
+    {
+     "year": 1909.5,
+     "lane": "P",
+     "text": "Analytic Cubism (Horta)",
+     "above": false
+    },
+    {
+     "year": 1911.6,
+     "lane": "P",
+     "text": "Céret: side by side with Braque",
+     "above": true
+    },
+    {
+     "year": 1912.35,
+     "lane": "P",
+     "text": "First collage (Chair Caning)",
+     "above": false
+    },
+    {
+     "year": 1913.6,
+     "lane": "P",
+     "text": "Synthetic Cubism, constructions",
+     "above": true
+    }
+   ],
+   "markers": [
+    {
+     "year": 1907.85,
+     "text": "THE LANES MEET"
+    },
+    {
+     "year": 1911.6,
+     "text": "ROPED TOGETHER"
+    },
+    {
+     "year": 1914.6,
+     "text": "THE ROPE BREAKS"
+    }
+   ],
+   "notes": "Parallel timeline. Braque (red) comes from the COLOR track (Fauvism, with Matisse and Derain); Picasso (blue) from Blue/Rose to Demoiselles. Dotted lines: where the lanes touch: 1907 meeting, 1911 Céret, 1914 war."
+  },
+  {
+   "type": "text",
+   "title": "Before: Cézanne and the Fauves",
+   "bullets": [
+    {
+     "text": "Cézanne (d. 1906): nature as cylinder, sphere and cone; color patches as building blocks."
+    },
+    {
+     "text": "1905 Salon d'Automne: Matisse, Derain and friends are called 'fauves' (wild beasts)."
+    },
+    {
+     "text": "Two tracks open up: COLOR (Matisse) and STRUCTURE (Cézanne → Picasso and Braque)."
+    },
+    {
+     "text": "View it here: Matisse, Open Window, Collioure (1905), National Gallery of Art",
+     "url": "https://www.nga.gov/collection/art-object-page.106384.html"
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.18120382",
+   "caption": "Paul Cézanne, Mont Sainte-Victoire, 1905",
+   "notes": "Cézanne is the starting gun. He built the mountain out of patches of color, each patch a small plane. In a 1904 letter to Émile Bernard he advised treating nature 'by means of the cylinder, the sphere, the cone.' He died in October 1906; the big Cézanne memorial show at the 1907 Salon d'Automne sent Braque and Picasso back to these paintings. CONTEXT: the meaning here is in HOW we see, not WHAT we see.",
+   "alt": "Paul Cézanne, Mont Sainte-Victoire, 1905",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.14704444",
+   "caption": "Henri Matisse, Woman with a Hat, 1905",
+   "notes": "Salon d'Automne, 1905. Critic Louis Vauxcelles called this room a cage of 'fauves' (wild beasts). Color no longer describes the world; it expresses the painter. This is the 'freedom of color' half of the revolution. Braque sees this show and becomes a Fauve.",
+   "alt": "Henri Matisse, Woman with a Hat, 1905",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.14676607",
+   "caption": "Henri Matisse, Le Bonheur de vivre (The Joy of Life), 1905–06",
+   "notes": "Shown at the 1906 Salon des Indépendants and bought by Leo and Gertrude Stein, where Picasso saw it. Picasso took it as a challenge from his chief rival; Les Demoiselles d'Avignon (1907) is in part his answer. Two tracks: Matisse = color; Picasso, then Braque = structure.",
+   "alt": "Henri Matisse, Le Bonheur de vivre (The Joy of Life), 1905–06",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.15655277",
+   "caption": "André Derain, Charing Cross Bridge, 1905–06",
+   "notes": "Derain was Matisse's partner in Fauvism (summer 1905 at Collioure). Note the flat, unmixed color and the strong outlines; the Thames painted from memory of Monet, but in pure color. Braque's friend group: Derain, Friesz, Matisse.",
+   "alt": "André Derain, Charing Cross Bridge, 1905–06",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.10595208",
+   "caption": "Georges Braque, Landscape at L'Estaque, 1906–07",
+   "notes": "BRAQUE THE FAUVE. Braque (1882–1963) trained as a house painter-decorator in Le Havre, like his father. In 1906 he paints at L'Estaque near Marseille, Cézanne's own motif, in Fauve color. Point out the hot pinks and violets: pure Matisse-track.",
+   "alt": "Georges Braque, Landscape at L'Estaque, 1906–07",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.14566180",
+   "caption": "Georges Braque, Landscape at La Ciotat, 1907",
+   "notes": "Summer 1907. Braque showed six Fauve paintings at the 1907 Salon des Indépendants and sold all of them (to the dealer Wilhelm Uhde). He is a successful Fauve at 25. Then, that fall, he meets Picasso and everything changes.",
+   "alt": "Georges Braque, Landscape at La Ciotat, 1907",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "text",
+   "title": "Picasso's lane, 1901–1907 (view on museum sites)",
+   "bullets": [
+    {
+     "text": "The Old Guitarist, 1903–04 (Blue Period), Art Institute of Chicago",
+     "url": "https://www.artic.edu/artworks/28067/the-old-guitarist"
+    },
+    {
+     "text": "Family of Saltimbanques, 1905 (Rose Period), National Gallery of Art",
+     "url": "https://www.nga.gov/collection/art-object-page.46665.html"
+    },
+    {
+     "text": "Gertrude Stein, 1905–06, The Met",
+     "url": "https://www.metmuseum.org/art/collection/search/488221"
+    },
+    {
+     "text": "Les Demoiselles d'Avignon, 1907, MoMA",
+     "url": "https://www.moma.org/collection/works/79766"
+    },
+    {
+     "text": "Picasso's works are under copyright and not licensed to JSTOR: click to view each one at the museum."
+    }
+   ],
+   "notes": "Blue Period (poverty, blindness, grief) to Rose Period (circus performers) to the Gertrude Stein portrait, whose mask-like face (finished 1906 after Iberian sculpture) points to Les Demoiselles. Demoiselles (1907): five figures, faces drawn from Iberian and African masks, space shattered. Even friends were shocked. Braque saw it in Picasso's studio in late 1907."
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.15675095",
+   "caption": "Gelett Burgess, Pablo Picasso in his studio at the Bateau-Lavoir, 1908 (photograph)",
+   "notes": "PICASSO'S LANE. Picasso (1881–1973), Spanish, in Paris from 1904 in the ramshackle Bateau-Lavoir studios. Burgess photographed him for 'The Wild Men of Paris' (Architectural Record, 1910), an article that also featured Braque. JSTOR cannot show Picasso's paintings (the estate does not license them), so his works are on the 'View it here' slides.",
+   "alt": "Gelett Burgess, Pablo Picasso in his studio at the Bateau-Lavoir, 1908 (photograph)",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "text",
+   "title": "1907: the two lanes meet",
+   "bullets": [
+    {
+     "text": "Fall 1907: the poet Guillaume Apollinaire brings Braque to Picasso's studio."
+    },
+    {
+     "text": "Braque sees Les Demoiselles d'Avignon; the Cézanne memorial show opens at the Salon d'Automne."
+    },
+    {
+     "text": "Braque drops Fauve color. Picasso and Braque begin a daily conversation in paint."
+    },
+    {
+     "text": "'We were like two mountain climbers roped together.' (Braque)"
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.10595024",
+   "caption": "Georges Braque, Large Nude, 1907–08",
+   "notes": "Braque's answer to Les Demoiselles d'Avignon, which Picasso showed him in his studio in late 1907 (the poet Apollinaire introduced them). Braque reportedly said it was like drinking kerosene to spit fire. The Fauve color is gone; the body is carved into planes.",
+   "alt": "Georges Braque, Large Nude, 1907–08",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.18112301",
+   "caption": "Georges Braque, Houses at L'Estaque, 1908",
+   "notes": "THE PAINTING THAT NAMED CUBISM. Summer 1908, back at L'Estaque, Braque reduces houses and trees to blocks, no horizon, no single light source. The Salon d'Automne jury (Matisse was on it) rejected his entries; Matisse is said to have mentioned 'little cubes.' Kahnweiler showed them in November 1908 and Vauxcelles wrote that Braque reduced everything to 'cubes.' The name stuck.",
+   "alt": "Georges Braque, Houses at L'Estaque, 1908",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.18130204",
+   "caption": "Georges Braque, Viaduct at L'Estaque, 1907–08",
+   "notes": "Compare with Cézanne's mountain: the same building-block brushwork, now pushed further. Ask students: where are we standing? (Nowhere fixed. That is the point.)",
+   "alt": "Georges Braque, Viaduct at L'Estaque, 1907–08",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "text",
+   "title": "Analytic Cubism, 1909–1911: taking the object apart",
+   "bullets": [
+    {
+     "text": "Objects broken into small planes, seen from several viewpoints at once."
+    },
+    {
+     "text": "Muted browns and greys so structure, not color, carries the meaning."
+    },
+    {
+     "text": "View it here: Picasso, Portrait of Ambroise Vollard (1910)",
+     "url": "https://artsandculture.google.com/search?q=Picasso%20Portrait%20of%20Ambroise%20Vollard"
+    },
+    {
+     "text": "View it here: Picasso, Ma Jolie (1911–12), MoMA",
+     "url": "https://artsandculture.google.com/search?q=Picasso%20Ma%20Jolie"
+    },
+    {
+     "text": "Summer 1911 at Céret: their paintings become nearly impossible to tell apart."
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.14570369",
+   "caption": "Georges Braque, Violin and Palette, 1909",
+   "notes": "ANALYTIC CUBISM, 1909–1911. The violin is broken into facets you see from several sides at once. Look at the top: a nail painted in trompe-l'oeil, casting a shadow, a joke about 'real' illusion inside a painting that refuses illusion. Braque and Picasso now see each other almost daily. Braque: 'We were like two mountain climbers roped together.'",
+   "alt": "Georges Braque, Violin and Palette, 1909",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.14698723",
+   "caption": "Georges Braque, Violin and Candlestick, 1910",
+   "notes": "Peak Analytic Cubism: a near-monochrome of browns and greys, so color does not distract from structure. Objects dissolve into overlapping planes (passage). This is the moment the image almost leaves the object behind: the road to abstraction starts here.",
+   "alt": "Georges Braque, Violin and Candlestick, 1910",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.14555234",
+   "caption": "Georges Braque, Man with a Guitar, 1911–12",
+   "notes": "Painted at Céret, in the Pyrenees, where Braque and Picasso worked side by side in summer 1911. Their paintings from these months are so close that experts still mix them up; they stopped signing the fronts of canvases.",
+   "alt": "Georges Braque, Man with a Guitar, 1911–12",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.14400604",
+   "caption": "Georges Braque, The Portuguese (The Emigrant), 1911",
+   "notes": "First stenciled letters in a Cubist painting ('BAL', 'D CO'): a sign-painter's technique from Braque's house-painting training. Letters are flat, so they push back against the shattered space: real-world text enters the picture. One step from collage.",
+   "alt": "Georges Braque, The Portuguese (The Emigrant), 1911",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.22758111",
+   "caption": "Juan Gris, Portrait of Pablo Picasso, 1912",
+   "notes": "Juan Gris, a younger Spaniard and Picasso's neighbor, joins as the 'third Cubist' and dedicates this 1912 portrait 'Hommage à Pablo Picasso.' Cubism is becoming a movement, not just a two-man conversation.",
+   "alt": "Juan Gris, Portrait of Pablo Picasso, 1912",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "text",
+   "title": "1912: paper, glue and the real world (Synthetic Cubism)",
+   "bullets": [
+    {
+     "text": "Picasso, Still Life with Chair Caning (May 1912): the first collage",
+     "url": "https://artsandculture.google.com/search?q=Picasso%20Still%20Life%20with%20Chair%20Caning"
+    },
+    {
+     "text": "Braque, Fruit Dish and Glass (Sept 1912): the first papier collé, The Met",
+     "url": "https://artsandculture.google.com/search?q=Braque%20Fruit%20Dish%20and%20Glass%201912"
+    },
+    {
+     "text": "Picasso, Guitar (1912–14): a sculpture built, not carved, MoMA",
+     "url": "https://artsandculture.google.com/search?q=Picasso%20Guitar%201914%20sheet%20metal"
+    },
+    {
+     "text": "Instead of breaking objects down, artists now BUILD images from flat pieces: wallpaper, newspaper, sheet music."
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.18110375",
+   "caption": "Georges Braque, Glass, Carafe and Newspaper, 1913–14 (papier collé)",
+   "notes": "SYNTHETIC CUBISM. In September 1912 at Sorgues, Braque bought faux-wood wallpaper and glued it into a drawing (Fruit Dish and Glass, see the link slide): the first papier collé. Picasso had glued oilcloth printed with chair caning into a painting that spring. Now the picture is BUILT from pieces of the real world instead of taking the world apart.",
+   "alt": "Georges Braque, Glass, Carafe and Newspaper, 1913–14 (papier collé)",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.10594178",
+   "caption": "Georges Braque, Woman with a Guitar, 1913",
+   "notes": "Painted at Sorgues, autumn 1913. Flat colored planes, imitation wood grain, and lettering: painting now borrows the logic of the papier collé. Ask: is this a picture OF something, or an object in its own right?",
+   "alt": "Georges Braque, Woman with a Guitar, 1913",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.10595207",
+   "caption": "Georges Braque, Violin and Pipe (Le Quotidien), 1913–14",
+   "notes": "Newspaper, wood-grain paper and charcoal. The newspaper masthead (Le Quotidien, 'the daily') plants the work in a real day and place. CONTEXT: the summer of 1914 ends this partnership; Braque is mobilized in August.",
+   "alt": "Georges Braque, Violin and Pipe (Le Quotidien), 1913–14",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "text",
+   "title": "1914: the rope breaks",
+   "bullets": [
+    {
+     "text": "August 1914: World War I. Braque (and Derain) are mobilized; Picasso, a Spaniard, stays in Paris."
+    },
+    {
+     "text": "Braque is badly wounded in 1915 and returns to painting in 1917, on his own path."
+    },
+    {
+     "text": "Picasso goes on: Three Musicians (1921), MoMA",
+     "url": "https://artsandculture.google.com/search?q=Picasso%20Three%20Musicians%201921%20MoMA"
+    },
+    {
+     "text": "Picasso, Guernica (1937): Cubist space used as political protest, Museo Reina Sofía",
+     "url": "https://www.museoreinasofia.es/en/collection/artwork/guernica"
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.9855024",
+   "caption": "Herbert List, Georges Braque in his Paris studio, 1949 (photograph)",
+   "notes": "AFTER THE ROPE BREAKS. August 1914: Picasso saw Braque and Derain off at the Avignon station; he later said he never found them again. Braque was badly wounded in 1915 (head wound, trepanned). He returned to painting in 1917 and worked quietly for decades; his late Studio and Bird paintings hang in the Louvre (ceiling, 1953). He died in 1963 and received a state funeral.",
+   "alt": "Herbert List, Georges Braque in his Paris studio, 1949 (photograph)",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "text",
+   "title": "Clearing the way: from Cubism to abstraction",
+   "bullets": [
+    {
+     "text": "Cubism proved a painting does not have to copy a single view of the world."
+    },
+    {
+     "text": "Mondrian (1911–): the tree becomes a grid → pure horizontal and vertical."
+    },
+    {
+     "text": "Malevich (1915): the Black Square, the object disappears."
+    },
+    {
+     "text": "Pollock and Abstract Expressionism (1940s–50s): the all-over field, no center, no single viewpoint."
+    },
+    {
+     "text": "Fauvism freed color; Cubism freed form. Together they made abstraction possible."
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.14385383",
+   "caption": "Piet Mondrian, Gray Tree, 1911",
+   "notes": "CLEARING THE WAY. Mondrian saw Braque and Picasso's Cubism in 1911–12 and moved to Paris. Watch the tree turn into a grid of lines. Within a few years he paints pure horizontal-vertical compositions: Cubism's structure without the object.",
+   "alt": "Piet Mondrian, Gray Tree, 1911",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.13698896",
+   "caption": "Kazimir Malevich, Black Square, 1915",
+   "notes": "Shown in Petrograd, December 1915 (the '0.10' exhibition), hung across the corner like a Russian icon. Malevich came out of Cubo-Futurism. Eight years after Les Demoiselles, the object is gone entirely.",
+   "alt": "Kazimir Malevich, Black Square, 1915",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "work",
+   "doi": "10.2307/community.14560981",
+   "caption": "Jackson Pollock, One: Number 31, 1950",
+   "notes": "The long result. Pollock studied Picasso intensely (Guernica above all). The all-over field, no center, no horizon, no single viewpoint: the shattered space of 1909–1912 opened the door. Tie-in: Lecture on Abstract Expressionism (video and transcript) on the Week 11 page.",
+   "alt": "Jackson Pollock, One: Number 31, 1950",
+   "source": {
+    "name": "JSTOR / Artstor",
+    "tier": "B"
+   }
+  },
+  {
+   "type": "text",
+   "title": "Key terms",
+   "bullets": [
+    {
+     "text": "Fauvism: 1905–07 movement of bold, non-descriptive color (Matisse, Derain, Braque)."
+    },
+    {
+     "text": "Cubism: 1907–14, objects shown as geometric planes from multiple viewpoints."
+    },
+    {
+     "text": "Analytic Cubism: 1909–11, objects taken apart into facets; muted color."
+    },
+    {
+     "text": "Synthetic Cubism: 1912–14, images built from flat shapes, collage and papier collé."
+    },
+    {
+     "text": "Collage: gluing real materials onto a picture surface (Picasso, 1912)."
+    },
+    {
+     "text": "Papier collé: collage made of cut paper (Braque, 1912)."
+    },
+    {
+     "text": "Passage: planes that bleed into each other, blurring object and space."
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "type": "text",
+   "title": "Discuss: meaning and context (Theme 5)",
+   "bullets": [
+    {
+     "text": "Why might two artists stop signing the fronts of their paintings?"
+    },
+    {
+     "text": "Braque trained as a house painter. How do his trade skills (stencils, faux wood) shape the meaning of his work?"
+    },
+    {
+     "text": "A newspaper glued into a still life: what does it add that paint cannot?"
+    },
+    {
+     "text": "Pick one work from today. How would its meaning change if it were made in 1880? In 1950?"
+    }
+   ],
+   "notes": ""
+  },
+  {
+   "type": "text",
+   "title": "Sources",
+   "bullets": [
+    {
+     "text": "Images: JSTOR / Artstor (licensed to Miami Dade College for teaching); collections credited in each slide's notes."
+    },
+    {
+     "text": "Museum collection pages: MoMA, The Met, National Gallery of Art, Art Institute of Chicago, Museo Reina Sofía, Centre Pompidou."
+    },
+    {
+     "text": "Smarthistory: Cubism, Fauvism, Picasso and Braque essays",
+     "url": "https://smarthistory.org/?s=cubism"
+    },
+    {
+     "text": "Google Arts & Culture (links for works not in JSTOR)."
+    },
+    {
+     "text": "Course textbook, Theme 5: Understanding Meaning and Context in Art, pg 129–157."
+    }
+   ],
+   "notes": ""
+  }
+ ]
+}

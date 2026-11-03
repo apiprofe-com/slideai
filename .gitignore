@@ -1,0 +1,5 @@
+node_modules/
+out/
+*.candidates.json
+*.saved.json
+.DS_Store
