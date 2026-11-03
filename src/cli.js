@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // SlideAI (works with JSTOR Images): local helper.
+//   slideai new                                ask for a title + works, then do everything (double-click start)
 //   slideai make <works.json> [--folder "Name"]  the whole thing, step by step (start here)
 //   slideai login                              open Chrome; you sign in to JSTOR; it waits for access
 //   slideai pick <works.json>                  search each work, show a contact sheet, you approve -> picks.json
@@ -11,7 +12,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
-import { browser, page, waitForAccess, sleep, log, HOME } from './jstor/session.js';
+import readline from 'node:readline/promises';
+import { spawn } from 'node:child_process';
+import { browser, page, waitForAccess, sleep, log, HOME, DECKS } from './jstor/session.js';
 import { searchWork, saveItem, exportFolder } from './jstor/actions.js';
 import { parseJstorExport } from './jstor/parse.js';
 import { buildDeck, finish } from './build/deck.js';
@@ -20,6 +23,8 @@ const [cmd, ...args] = process.argv.slice(2);
 const opt = (name, d) => { const i = args.indexOf(`--${name}`); return i >= 0 ? args.splice(i, 2)[1] : d; };
 const readJSON = (f) => JSON.parse(fs.readFileSync(f, 'utf8'));
 const writeJSON = (f, v) => fs.writeFileSync(f, JSON.stringify(v, null, 1));
+const worksOf = (f) => { const j = readJSON(f); return Array.isArray(j) ? j : j.works; };
+const titleOf = (f) => { const j = readJSON(f); return Array.isArray(j) ? null : j.title; };
 const normWorks = (w) => w.map((x) => (Array.isArray(x) ? { key: x[0], label: x[1], q: x[2] } : x));
 const MAX_ITEMS = 30, SAVE_PACE_MS = 15000, SEARCH_PACE_MS = 6000;
 
@@ -33,7 +38,7 @@ async function signedIn() {
 
 async function cmdPick(worksFile) {
   if (!worksFile || !fs.existsSync(worksFile)) throw new Error(`Works list not found: ${worksFile || '(none given)'}`);
-  const works = normWorks(readJSON(worksFile));
+  const works = normWorks(worksOf(worksFile));
   if (works.length > MAX_ITEMS + 5) throw new Error(`Too many works (${works.length}); keep a deck under ${MAX_ITEMS} images.`);
   const candFile = worksFile.replace(/\.json$/, '') + '.candidates.json';
   const cand = fs.existsSync(candFile) ? readJSON(candFile) : {};
@@ -169,11 +174,11 @@ async function cmdExport(outDir) {
 
 // Starter spec: title slide, one slide per pick (caption from the JSTOR record), link slides
 // for "not in JSTOR", sources. You (or Claude) then edit order, notes and text slides.
-async function cmdDraft(picksFile, exportFile, specFile) {
+async function cmdDraft(picksFile, exportFile, specFile, title) {
   const picks = readJSON(picksFile);
   const images = await parseJstorExport(fs.readFileSync(exportFile));
   const field = (rec, name) => ((rec.match(new RegExp(`^${name}:\\s*(.+)$`, 'mi')) || [])[1] || '').trim();
-  const slides = [{ type: 'title', title: path.basename(picksFile).replace(/\.picks\.json$/, ''), subtitle: '', notes: '' }];
+  const slides = [{ type: 'title', title: title || path.basename(picksFile).replace(/\.picks\.json$/, ''), subtitle: '', notes: '' }];
   const links = [];
   for (const pk of picks) {
     const img = pk.doi && images[pk.doi];
@@ -202,9 +207,11 @@ async function cmdBuild(specFile, exportFile, outFile) {
 // Every step resumes if stopped, so you can rerun the same command.
 async function cmdMake(worksFile, folder) {
   const base = worksFile.replace(/\.json$/, '');
-  const picksFile = `${base}.picks.json`, specFile = `${base}.spec.json`, outFile = `${base}.pptx`;
+  const deckTitle = titleOf(worksFile);
+  const picksFile = `${base}.picks.json`, specFile = `${base}.spec.json`;
+  const outFile = deckTitle ? path.join(path.dirname(worksFile), `${safeName(deckTitle)}.pptx`) : `${base}.pptx`;
   if (!worksFile || !fs.existsSync(worksFile)) throw new Error(`Works list not found: ${worksFile || '(none given)'}. Example: node src/cli.js make ~/Desktop/test.json`);
-  folder = folder || path.basename(base);
+  folder = folder || titleOf(worksFile) || path.basename(base);
   log(`STEP 1 of 5: sign in to JSTOR in the Chrome window.`);
   if (!fs.existsSync(picksFile)) { log('STEP 2 of 5: searching JSTOR and opening the contact sheet. Pick one image per work, then click Approve.'); await cmdPick(worksFile); }
   if (!fs.existsSync(picksFile)) { log('Stopped before approval. Run the same command again to continue.'); return; }
@@ -218,19 +225,71 @@ async function cmdMake(worksFile, folder) {
   const localExp = `${base}.jstor.pptx`;
   fs.copyFileSync(exp, localExp);
   log('STEP 5 of 5: building your deck.');
-  if (!fs.existsSync(specFile)) await cmdDraft(picksFile, localExp, specFile);
+  if (!fs.existsSync(specFile)) await cmdDraft(picksFile, localExp, specFile, titleOf(worksFile));
   await cmdBuild(specFile, localExp, outFile);
+  fs.writeFileSync(path.join(path.dirname(worksFile), '.done'), new Date().toISOString());
   log(`DONE. Your deck: ${outFile}\nTo change wording, order or notes: edit ${specFile} (or ask Claude to), then run:\n  node src/cli.js build "${specFile}" "${localExp}" "${outFile}"`);
 }
 
+// Guided start for anyone: asks for a title and the works, makes the list, runs everything.
+const safeName = (t) => t.replace(/[<>:"/\\|?*\x00-\x1f]/g, '').replace(/\s+/g, ' ').trim().slice(0, 60) || 'My deck';
+function openFolder(dir) {
+  const opener = process.platform === 'win32' ? 'explorer' : process.platform === 'darwin' ? 'open' : 'xdg-open';
+  try { spawn(opener, [dir], { detached: true, stdio: 'ignore' }).unref(); } catch { /* fine */ }
+}
+async function cmdNew() {
+  // Line queue: works when typing, pasting several lines at once, or piping answers in.
+  const rlx = readline.createInterface({ input: process.stdin, terminal: false });
+  const queue = [], waiters = [];
+  let closed = false;
+  rlx.on('line', (l) => { if (waiters.length) waiters.shift()(l); else queue.push(l); });
+  rlx.on('close', () => { closed = true; while (waiters.length) waiters.shift()(''); });
+  const rl = {
+    question: (prompt) => { process.stdout.write(prompt); return queue.length ? Promise.resolve(queue.shift()) : closed ? Promise.resolve('') : new Promise((r) => waiters.push(r)); },
+    close: () => rlx.close(),
+  };
+  console.log('\n=== SlideAI (works with JSTOR Images) ===');
+  console.log('Makes a PowerPoint from JSTOR images. You log in to JSTOR yourself and pick every image.\n');
+  fs.mkdirSync(DECKS, { recursive: true });
+  const unfinished = fs.readdirSync(DECKS).filter((d) => fs.existsSync(path.join(DECKS, d, 'works.json')) && !fs.existsSync(path.join(DECKS, d, '.done')));
+  let worksFile = null;
+  if (unfinished.length) {
+    const a = (await rl.question(`Continue "${unfinished[0]}"? (y = continue, n = start a new deck) `)).trim().toLowerCase();
+    if (a.startsWith('y')) worksFile = path.join(DECKS, unfinished[0], 'works.json');
+  }
+  if (!worksFile) {
+    const title = safeName(await rl.question('Deck title (e.g. The Invention of Cubism): '));
+    console.log('\nType the works you want, ONE PER LINE, like:  Braque, Houses at L\'Estaque, 1908');
+    console.log('Up to 30. Press Enter on an empty line when you are done.\n');
+    const works = [];
+    for (;;) {
+      const line = (await rl.question(`${works.length + 1}. `)).trim();
+      if (!line) { if (works.length || closed) break; continue; }
+      const q = line.replace(/\(.*?\)/g, ' ').replace(/\b(c\.|ca\.)?\s*\d{4}(\s*[-–]\s*\d{2,4})?\b/g, ' ').replace(/[,;:]/g, ' ').replace(/\s+/g, ' ').trim();
+      works.push({ key: `w${works.length + 1}`, label: line, q });
+      if (works.length >= 30) { console.log('That is 30, the limit.'); break; }
+    }
+    const dir = path.join(DECKS, title);
+    fs.mkdirSync(dir, { recursive: true });
+    worksFile = path.join(dir, 'works.json');
+    writeJSON(worksFile, { title, works });
+    console.log(`\nSaved your list: ${worksFile}`);
+  }
+  rl.close();
+  await cmdMake(worksFile);
+  openFolder(path.dirname(worksFile));
+}
+
 try {
-  if (cmd === 'make') { const folder = opt('folder'); await cmdMake(args[0], folder); }
+  if (!cmd || cmd === 'new') await cmdNew();
+  else if (cmd === 'make') { const folder = opt('folder'); await cmdMake(args[0], folder); }
   else if (cmd === 'login') { const { b } = await signedIn(); b.disconnect(); }
   else if (cmd === 'pick') await cmdPick(args[0]);
   else if (cmd === 'save') { const folder = opt('folder'); await cmdSave(args[0], folder); }
   else if (cmd === 'export') await cmdExport(opt('out', path.join(HOME, 'downloads')));
   else if (cmd === 'draft') await cmdDraft(args[0], args[1], args[2]);
   else if (cmd === 'build') await cmdBuild(args[0], args[1], args[2]);
-  else { console.log(fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n').slice(1, 11).map((l) => l.replace(/^\/\/ ?/, '')).join('\n')); process.exit(cmd ? 2 : 0); }
+  else if (cmd === 'help') { console.log(fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n').slice(1, 12).map((l) => l.replace(/^\/\/ ?/, '')).join('\n')); }
+  else { log(`Unknown command "${cmd}". Try: new, make, build, help`); process.exit(2); }
   process.exit(0);
 } catch (e) { log('ERROR', e.message); process.exit(1); }

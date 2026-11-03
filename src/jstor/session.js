@@ -7,7 +7,31 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 
-export const HOME = path.join(os.homedir(), '.slideai');
+// App data: %LOCALAPPDATA%\\SlideAI on Windows (no admin needed), ~/.slideai elsewhere.
+export const HOME = process.platform === 'win32'
+  ? path.join(process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local'), 'SlideAI')
+  : path.join(os.homedir(), '.slideai');
+// Decks go in Documents/SlideAI (not the Desktop, which OneDrive often syncs and locks on Windows).
+export const DECKS = path.join(os.homedir(), 'Documents', 'SlideAI');
+
+// Chrome (machine or per-user install), else Microsoft Edge, which every Windows PC has.
+export async function findBrowser() {
+  const L = process.env.LOCALAPPDATA || '', PF = process.env.PROGRAMFILES || 'C:\\Program Files', PF86 = process.env['PROGRAMFILES(X86)'] || 'C:\\Program Files (x86)';
+  const candidates = process.platform === 'win32' ? [
+    path.join(PF, 'Google', 'Chrome', 'Application', 'chrome.exe'),
+    path.join(PF86, 'Google', 'Chrome', 'Application', 'chrome.exe'),
+    path.join(L, 'Google', 'Chrome', 'Application', 'chrome.exe'),
+    path.join(PF86, 'Microsoft', 'Edge', 'Application', 'msedge.exe'),
+    path.join(PF, 'Microsoft', 'Edge', 'Application', 'msedge.exe'),
+  ] : process.platform === 'darwin' ? [
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    path.join(os.homedir(), 'Applications/Google Chrome.app/Contents/MacOS/Google Chrome'),
+    '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+  ] : ['/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/microsoft-edge'];
+  const hit = candidates.find((c) => { try { return fs.existsSync(c); } catch { return false; } });
+  if (hit) return hit;
+  throw new Error('Google Chrome or Microsoft Edge not found. Install Chrome (no admin needed: google.com/chrome) and try again.');
+}
 export const PROFILE = path.join(HOME, 'chrome-profile');
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 export const IMAGES_FILTER = '&efqs=eyJjdHkiOlsiWTI5dWRISnBZblYwWldSZmFXMWhaMlZ6Il19';
@@ -24,7 +48,7 @@ export async function browser() {
   };
   try { return await connect(); } catch { /* not running */ }
   try { fs.unlinkSync(portFile); } catch { /* none */ }
-  const exe = await puppeteer.executablePath('chrome');
+  const exe = await findBrowser();
   const child = spawn(exe, [`--user-data-dir=${PROFILE}`, '--remote-debugging-port=0', '--window-size=1300,900',
     '--no-first-run', '--no-default-browser-check', 'https://www.jstor.org/'], { detached: true, stdio: 'ignore' });
   child.unref();

@@ -17,7 +17,24 @@ JSTOR until you approve.
 Steps 2–6 are **one command**. If anything stops it (a JSTOR "are you human?" check, a closed
 window), run the same command again and it picks up where it left off.
 
-## Before the first time (once)
+## Windows PC (classroom): no install, no admin
+1. Go to **Releases** on this GitHub page and download **SlideAI-windows.zip**.
+2. Right-click the zip → **Properties** → tick **Unblock** if you see it → OK. Then **Extract All**
+   (e.g. into Documents).
+3. Open the extracted folder and double-click **Start SlideAI.bat**. If Windows says "Windows
+   protected your PC", click **More info → Run anyway**.
+4. Type a **deck title**, then your works **one per line** (`Braque, Houses at L'Estaque, 1908`),
+   and press Enter on an empty line when done.
+5. Log in to JSTOR in the Chrome/Edge window that opens, pick images on the contact sheet, and
+   open your Workspace folder when asked. Your deck lands in **Documents\SlideAI\<title>** and the
+   folder opens.
+
+Needs Google Chrome or Microsoft Edge (every Windows PC has Edge). If anything stops, double-click
+**Start SlideAI.bat** again and choose "continue".
+
+## Mac (or Windows with Node installed)
+
+### Before the first time (once)
 - Google Chrome installed.
 - Node installed (already on Lucas's Mac).
 - In Terminal: `cd ~/slideai && npm install`

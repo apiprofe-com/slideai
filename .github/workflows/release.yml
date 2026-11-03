@@ -1,0 +1,44 @@
+name: Windows prototype zip
+# Builds SlideAI-windows.zip (portable Node + app + Start SlideAI.bat). No install, no admin.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  windows-zip:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install app dependencies (no browser download)
+        run: npm ci --omit=dev
+      - name: Smoke test - build the example deck offline
+        run: node src/cli.js build examples/cubism.spec.json - smoke.pptx
+      - name: Find Chrome/Edge like a classroom PC would
+        run: node --input-type=module -e "const m=await import('./src/jstor/session.js'); console.log(await m.findBrowser())"
+      - name: Assemble portable folder
+        shell: pwsh
+        run: |
+          $v = (node -v)
+          Invoke-WebRequest "https://nodejs.org/dist/$v/node-$v-win-x64.zip" -OutFile node.zip
+          Expand-Archive node.zip -DestinationPath nodezip
+          New-Item -ItemType Directory -Force SlideAI/node, SlideAI/app | Out-Null
+          Copy-Item "nodezip/node-$v-win-x64/node.exe" SlideAI/node/
+          Copy-Item "nodezip/node-$v-win-x64/LICENSE" SlideAI/node/
+          Copy-Item -Recurse src, node_modules, examples, package.json, README.md, LICENSE SlideAI/app/
+          Copy-Item "packaging/Start SlideAI.bat", "packaging/READ ME FIRST.txt" SlideAI/
+          Compress-Archive -Path SlideAI -DestinationPath SlideAI-windows.zip
+      - name: Upload as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SlideAI-windows
+          path: SlideAI-windows.zip
+      - name: Attach to the release (tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${{ github.ref_name }}" SlideAI-windows.zip --title "SlideAI ${{ github.ref_name }} (Windows prototype)" --notes "Download SlideAI-windows.zip, unblock, extract, double-click Start SlideAI.bat. See READ ME FIRST.txt inside."

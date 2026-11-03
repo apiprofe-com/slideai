@@ -1,0 +1,23 @@
+SlideAI (works with JSTOR Images) - Windows prototype
+====================================================
+
+No installing and no admin rights needed.
+
+1. Before extracting: right-click the .zip > Properties > tick "Unblock" (if shown) > OK.
+2. Extract the zip somewhere you can write, e.g. Documents\SlideAI-app.
+3. Double-click "Start SlideAI.bat".
+   (If Windows says "Windows protected your PC": click "More info" > "Run anyway".)
+4. Answer the questions: a deck title, then the works you want, one per line, like
+      Braque, Houses at L'Estaque, 1908
+   Press Enter on an empty line when done.
+5. A Chrome (or Edge) window opens on JSTOR. Log in YOUR school's way
+   ("Access through your institution"). SlideAI never sees your password.
+6. A contact sheet opens: pick one image per work (green = suggested), click Approve.
+7. Wait while it saves your picks to your JSTOR Workspace (about 15 seconds each).
+8. When asked, open JSTOR > Workspace > your folder. The export starts by itself.
+9. Your deck appears in Documents\SlideAI\<your title>\works.pptx and the folder opens.
+
+If anything stops it, double-click "Start SlideAI.bat" again and choose "continue".
+
+Use it for your own coursework and teaching under your school's JSTOR terms.
+At most 30 images per deck, at a normal human pace. Not affiliated with JSTOR or ITHAKA.
