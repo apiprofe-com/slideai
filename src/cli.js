@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // SlideAI (works with JSTOR Images): local helper.
+//   slideai make <works.json> [--folder "Name"]  the whole thing, step by step (start here)
 //   slideai login                              open Chrome; you sign in to JSTOR; it waits for access
 //   slideai pick <works.json>                  search each work, show a contact sheet, you approve -> picks.json
 //   slideai save <picks.json> --folder "Name"  save approved images to your JSTOR Workspace folder
@@ -168,13 +169,38 @@ async function cmdBuild(specFile, exportFile, outFile) {
   warnings.forEach((w) => log('WARN', w));
 }
 
+// One guided run: search -> you pick -> save -> you open the folder -> export -> draft -> build.
+// Every step resumes if stopped, so you can rerun the same command.
+async function cmdMake(worksFile, folder) {
+  const base = worksFile.replace(/\.json$/, '');
+  const picksFile = `${base}.picks.json`, specFile = `${base}.spec.json`, outFile = `${base}.pptx`;
+  folder = folder || path.basename(base);
+  log(`STEP 1 of 5: sign in to JSTOR in the Chrome window.`);
+  if (!fs.existsSync(picksFile)) { log('STEP 2 of 5: searching JSTOR and opening the contact sheet. Pick one image per work, then click Approve.'); await cmdPick(worksFile); }
+  if (!fs.existsSync(picksFile)) { log('Stopped before approval. Run the same command again to continue.'); return; }
+  log(`STEP 3 of 5: saving your picks to the JSTOR Workspace folder "${folder}" (about 15 seconds each).`);
+  await cmdSave(picksFile, folder);
+  log('STEP 4 of 5: in Chrome, open JSTOR > Workspace > the folder. The export starts by itself.');
+  const before = fs.existsSync(path.join(HOME, 'downloads')) ? new Set(fs.readdirSync(path.join(HOME, 'downloads'))) : new Set();
+  await cmdExport(path.join(HOME, 'downloads'));
+  const exp = fs.readdirSync(path.join(HOME, 'downloads')).filter((f) => f.endsWith('.pptx') && !before.has(f)).map((f) => path.join(HOME, 'downloads', f))[0];
+  if (!exp) { log('No export file found.'); return; }
+  const localExp = `${base}.jstor.pptx`;
+  fs.copyFileSync(exp, localExp);
+  log('STEP 5 of 5: building your deck.');
+  if (!fs.existsSync(specFile)) await cmdDraft(picksFile, localExp, specFile);
+  await cmdBuild(specFile, localExp, outFile);
+  log(`DONE. Your deck: ${outFile}\nTo change wording, order or notes: edit ${specFile} (or ask Claude to), then run:\n  node src/cli.js build "${specFile}" "${localExp}" "${outFile}"`);
+}
+
 try {
-  if (cmd === 'login') { const { b } = await signedIn(); b.disconnect(); }
+  if (cmd === 'make') { const folder = opt('folder'); await cmdMake(args[0], folder); }
+  else if (cmd === 'login') { const { b } = await signedIn(); b.disconnect(); }
   else if (cmd === 'pick') await cmdPick(args[0]);
   else if (cmd === 'save') { const folder = opt('folder'); await cmdSave(args[0], folder); }
   else if (cmd === 'export') await cmdExport(opt('out', path.join(HOME, 'downloads')));
   else if (cmd === 'draft') await cmdDraft(args[0], args[1], args[2]);
   else if (cmd === 'build') await cmdBuild(args[0], args[1], args[2]);
-  else { console.log(fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n').slice(1, 10).map((l) => l.replace(/^\/\/ ?/, '')).join('\n')); process.exit(cmd ? 2 : 0); }
+  else { console.log(fs.readFileSync(new URL(import.meta.url), 'utf8').split('\n').slice(1, 11).map((l) => l.replace(/^\/\/ ?/, '')).join('\n')); process.exit(cmd ? 2 : 0); }
   process.exit(0);
 } catch (e) { log('ERROR', e.message); process.exit(1); }
