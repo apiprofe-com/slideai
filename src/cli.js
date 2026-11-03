@@ -32,13 +32,15 @@ async function signedIn() {
 }
 
 async function cmdPick(worksFile) {
+  if (!worksFile || !fs.existsSync(worksFile)) throw new Error(`Works list not found: ${worksFile || '(none given)'}`);
   const works = normWorks(readJSON(worksFile));
   if (works.length > MAX_ITEMS + 5) throw new Error(`Too many works (${works.length}); keep a deck under ${MAX_ITEMS} images.`);
   const candFile = worksFile.replace(/\.json$/, '') + '.candidates.json';
   const cand = fs.existsSync(candFile) ? readJSON(candFile) : {};
   const { b, p } = await signedIn();
   for (const w of works) {
-    if (cand[w.key]?.cards?.length) continue;
+    const goodThumbs = (cand[w.key]?.cards || []).every((c) => !c.thumb || c.thumb.startsWith('data:image/'));
+    if (cand[w.key]?.cards?.length && goodThumbs) continue;
     try {
       const cards = await searchWork(p, w.q);
       cand[w.key] = { ...w, cards };
@@ -55,13 +57,40 @@ async function cmdPick(worksFile) {
   b.disconnect();
 }
 
-// Local contact sheet: top 4 per work, first result pre-selected (green); "link slide" if none fit.
+// Best text match for the label: words from artist/title, plus the label's year(s) in the card.
+function suggest(w, cards) {
+  if (!cards.length) return -1;
+  const norm = (t) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const words = norm(w.label).replace(/\(.*?\)/g, ' ').split(/[^a-z0-9']+/).filter((x) => x.length > 3);
+  // Label years, with ranges like "1902-06" expanded so 1905 counts as an exact match.
+  const years = [];
+  for (const m of w.label.matchAll(/\b(1[0-9]{3}|20[0-9]{2})(?:\s*[-–]\s*(\d{2,4}))?/g)) {
+    const a = Number(m[1]);
+    const b = m[2] ? Number(m[2].length === 2 ? m[1].slice(0, 2) + m[2] : m[2]) : a;
+    for (let y = a; y <= Math.min(b, a + 15); y++) years.push(y);
+  }
+  let best = 0, bestScore = -1;
+  cards.forEach((c, i) => {
+    const hay = norm(`${c.title} ${c.meta}`);
+    let sc = words.filter((x) => hay.includes(x)).length;
+    const cy = (hay.match(/\b(1[0-9]{3}|20[0-9]{2})\b/g) || []).map(Number);
+    if (years.length && cy.length) {
+      const d = Math.min(...years.flatMap((y) => cy.map((z) => Math.abs(y - z))));
+      sc += d === 0 ? 4 : d <= 2 ? 2 : d <= 5 ? 1 : -1;
+    }
+    if (sc > bestScore) { bestScore = sc; best = i; }
+  });
+  return best;
+}
+
+// Local contact sheet: top 4 per work, best text/date match pre-selected (green); "link slide" if none fit.
 function contactSheet(b, works, cand, picksFile) {
   return new Promise((resolve) => {
     const rows = works.map((w) => {
       const c = cand[w.key]?.cards || [];
-      const opts = c.map((x, i) => `<label class="c${i === 0 ? ' g' : ''}"><input type="radio" name="${w.key}" value="${i}"${i === 0 ? ' checked' : ''}>
-        ${x.thumb ? `<img src="${x.thumb}" alt="">` : '<div class="noimg">no preview</div>'}<b>${esc(x.title)}</b><small>${esc(x.meta)}</small></label>`).join('');
+      const pick = suggest(w, c);
+      const opts = c.map((x, i) => `<label class="c${i === pick ? ' g' : ''}"><input type="radio" name="${w.key}" value="${i}"${i === pick ? ' checked' : ''}>
+        ${x.thumb && x.thumb.startsWith('data:image/') ? `<img src="${x.thumb}" alt="">` : '<div class="noimg">no preview<br>(choose by title and date)</div>'}<b>${esc(x.title)}</b><small>${esc(x.meta)}</small>${i === pick ? '<em>suggested</em>' : ''}</label>`).join('');
       return `<section><h2>${esc(w.label)}</h2><p class="q">searched: ${esc(w.q)}</p><div class="row">${opts}
         <label class="c link"><input type="radio" name="${w.key}" value="link"${c.length ? '' : ' checked'}><div class="noimg">Not in JSTOR / none fit:<br>use a link slide</div></label></div></section>`;
     }).join('');
@@ -72,7 +101,7 @@ function contactSheet(b, works, cand, picksFile) {
       .c:has(input:checked){border-color:#16a34a;background:#f0fdf4} .c input{align-self:flex-start} img{width:100%;height:150px;object-fit:contain;background:#eee}
       .noimg{height:150px;display:flex;align-items:center;justify-content:center;text-align:center;background:#f1f1f1;color:#555} small{color:#666}
       button{position:sticky;bottom:10px;font:600 16px system-ui;padding:12px 20px;border:0;border-radius:8px;background:#16a34a;color:#fff;cursor:pointer}
-    </style><h1>Pick one image per work</h1><p>Green = suggested (JSTOR's top match). Change any pick, or choose "link slide". Nothing is saved to JSTOR until you run <code>slideai save</code>.</p>
+    </style><h1>Pick one image per work</h1><p>Green = suggested (best match for the artist, title and date). Change any pick, or choose "link slide". Nothing is saved to JSTOR until you run <code>slideai save</code>.</p>
     <form method="post">${rows}<button>Approve picks</button></form>`;
     const srv = http.createServer((req, res) => {
       if (req.method === 'POST') {
@@ -174,6 +203,7 @@ async function cmdBuild(specFile, exportFile, outFile) {
 async function cmdMake(worksFile, folder) {
   const base = worksFile.replace(/\.json$/, '');
   const picksFile = `${base}.picks.json`, specFile = `${base}.spec.json`, outFile = `${base}.pptx`;
+  if (!worksFile || !fs.existsSync(worksFile)) throw new Error(`Works list not found: ${worksFile || '(none given)'}. Example: node src/cli.js make ~/Desktop/test.json`);
   folder = folder || path.basename(base);
   log(`STEP 1 of 5: sign in to JSTOR in the Chrome window.`);
   if (!fs.existsSync(picksFile)) { log('STEP 2 of 5: searching JSTOR and opening the contact sheet. Pick one image per work, then click Approve.'); await cmdPick(worksFile); }

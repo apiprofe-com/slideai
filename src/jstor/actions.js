@@ -7,26 +7,46 @@ import { sleep, log, humanCheck, findByText, IMAGES_FILTER } from './session.js'
 const searchUrl = (q) => 'https://www.jstor.org/action/doBasicSearch?Query=' + encodeURIComponent(q) + '&so=rel' + IMAGES_FILTER;
 const decodeAmp = (s) => s.replace(/&amp;/g, '&');
 
-// Top-4 image results for one query, with thumbnails fetched in-page (same session).
+// Top-4 image results for one query. Thumbnails: scroll each card into view, wait for the
+// image to really load, fetch it (must be ok + image/*), else screenshot the image element.
 export async function searchWork(p, q) {
   await p.goto(searchUrl(q), { waitUntil: 'domcontentloaded', timeout: 60000 });
   await p.waitForSelector('[data-qa=image-card]', { timeout: 15000 }).catch(() => {});
   await sleep(2500);
   if (await humanCheck(p)) throw Object.assign(new Error('JSTOR human check'), { human: true });
-  return p.evaluate(async () => {
-    const r = [];
-    for (const li of [...document.querySelectorAll('li[data-doi]')].slice(0, 4)) {
-      const c = li.querySelector('[data-qa=image-card]');
-      const img = li.querySelector('img[data-qa=image-card-image]');
-      let thumb = null;
-      try {
-        const bl = await (await fetch(img.src)).blob();
-        thumb = await new Promise((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(bl); });
-      } catch { /* no thumbnail */ }
-      r.push({ doi: li.getAttribute('data-doi'), title: c?.getAttribute('data-title') || '', meta: li.innerText.replace(/\s+/g, ' ').trim().slice(0, 220), thumb });
+  const lis = (await p.$$('li[data-doi]')).slice(0, 4);
+  const out = [];
+  for (const li of lis) {
+    const info = await li.evaluate((el) => {
+      const c = el.querySelector('[data-qa=image-card]');
+      return { doi: el.getAttribute('data-doi'), title: c?.getAttribute('data-title') || '', meta: el.innerText.replace(/\s+/g, ' ').trim().slice(0, 220) };
+    });
+    let thumb = null;
+    const img = await li.$('img[data-qa=image-card-image]') || await li.$('img');
+    if (img) {
+      for (let attempt = 0; attempt < 3 && !thumb; attempt++) {
+        await img.evaluate((el) => el.scrollIntoView({ block: 'center' }));
+        await p.waitForFunction((el) => el.complete && el.naturalWidth > 0, { timeout: 6000 }, img).catch(() => {});
+        thumb = await img.evaluate(async (el) => {
+          try {
+            const r = await fetch(el.currentSrc || el.src);
+            const type = r.headers.get('content-type') || '';
+            if (!r.ok || !type.startsWith('image/')) return null;
+            const bl = await r.blob();
+            return await new Promise((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(bl); });
+          } catch { return null; }
+        });
+        if (!thumb) {
+          const ok = await img.evaluate((el) => el.complete && el.naturalWidth > 0);
+          if (ok) thumb = 'data:image/png;base64,' + await img.screenshot({ encoding: 'base64' }).catch(() => '');
+          if (thumb === 'data:image/png;base64,') thumb = null;
+        }
+        if (!thumb) await sleep(1500);
+      }
     }
-    return r;
-  });
+    out.push({ ...info, thumb });
+  }
+  return out;
 }
 
 // Save one approved item to the named Workspace folder (created on first use).
